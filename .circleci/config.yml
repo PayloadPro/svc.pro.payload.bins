@@ -20,4 +20,6 @@ jobs:
       - run: 
           name: go test
           command: |
-            go test -v ./...
+            ./cc-test-reporter before-build
+            go test -v -coverprofile=c.out ./...
+            ./cc-test-reporter after-build --exit-code $?
