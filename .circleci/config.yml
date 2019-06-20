@@ -1,11 +1,23 @@
 version: 2
 jobs:
   build:
+    environment:
+      CC_TEST_REPORTER_ID: $CC_TEST_REPORTER_ID
     docker:
       - image: circleci/golang:1.11
 
     working_directory: /go/src/github.com/PayloadPro/svc.pro.payload.bins
     steps:
       - checkout
-      - run: go get -v -t -d ./...
-      - run: go test -v ./...
+      - run: 
+          name: go get
+          command: go get -v -t -d ./...
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run: 
+          name: go test
+          command: |
+            go test -v ./...
